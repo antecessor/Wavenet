@@ -6,11 +6,11 @@ import numpy as np
 class CasualDilatedConv1D(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, dilation, padding=1):
         super().__init__()
-        self.conv1D = nn.Conv1d(in_channels, out_channels, kernel_size, dilation=dilation, bias=False, padding=padding)
-        # self.ignoreOutIndex = (kernel_size - 1) * dilation
+        self.conv1D = nn.Conv1d(in_channels, out_channels, kernel_size, dilation=dilation, bias=False, padding='same')
+        self.ignoreOutIndex = (kernel_size - 1) * dilation
 
     def forward(self, x):
-        return self.conv1D(x)[..., :-1]
+        return self.conv1D(x)[..., :-self.ignoreOutIndex]
 
 
 class DenseLayer(nn.Module):
